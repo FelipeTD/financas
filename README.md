@@ -38,3 +38,17 @@ Abaixo todos os passos feitos para criar a aplicação inicial
   - https://spring.io/guides/gs/serving-web-content/
 - Download dependencia do maven para Junit
   - https://mvnrepository.com/artifact/junit/junit/4.13.2
+
+### Segundo Objetivo: Adicionar JPA ao projeto
+Abaixo todos os passos feitos para adicionar o JPA ao projeto:
+- Foram adicionadas duas dependências ao pom.xml.
+- Banco de dados h2 para armazenar os dados e JPA para acessar os dados.
+- Foi criada uma interface CustomerRepository que extende CrudRepository.
+- Essa ‘interface’ foi utilizada para chamar os métodos findByLastName e findById do CrudRepository.
+- Na classe FinancasApplication fizemos um método demo() para testar o código.
+- Gerando um arquivo JAR com o comando 'mvn clean package'.
+- Teste realizado com o JAR gerado para garantir que continua tudo funcionando.
+
+#### Links Utilizados
+- Acessing Data with JPA
+  - https://spring.io/guides/gs/accessing-data-jpa/
