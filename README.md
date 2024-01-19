@@ -1,7 +1,7 @@
 # Financas
 Projeto para controle de finanças
 
-Será colocado todo o passo a passo que foi utilizado para criar e melhorar o projeto até sua versão final
+Será colocado todo o passo a passo que foi utilizado para criar e melhorar o projeto até a sua versão final
 
 ## Objetivos
 
@@ -100,3 +100,53 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - https://dev.to/nfo94/como-criar-um-container-com-mysql-server-com-docker-e-conecta-lo-no-workbench-linux-1blf
 - Página com a dependência correta do MySQL
   - https://stackoverflow.com/questions/33123985/cannot-load-driver-class-com-mysql-jdbc-driver-spring
+
+### Quarto Objetivo: Adicionar uma API RestFull
+- A API tem que possuir os quatro métodos: GET, POST, PUT e DELETE
+- Uma anotação importante é que as caracteristicas abaixo não fazem de um projeto Restful:
+  - URL's como '/employees/3' não são REST.
+  - Apenas usar GET, POST, PUT, DELETE não torna o seu projeto Rest.
+  - Ter um projeto com todas as operações CRUD não torna o seu projeto um Rest.
+  - O nome desse projeto é RPC (Remote Procedure Call)
+- Como transformar o projeto num projeto Restful?
+  - Precisamos trabalhar na parte de consumo do cliente.
+  - Para isso foi adicionado a dependencia Spring HATEOAS que facilita o consumo.
+  - Vantagens em utilizar HATEOAS:
+    - Ao adicionar o HATEOAS retornamos também um objeto com os links que podemos consumir.
+    - Continuamos retornando o objeto que será consumido.
+    - Conseguimos modificar serviços sem alterar serviços antigos.
+    - O exemplo que foi dado é de alterar o modelo Employee para ter primeiro nome e ultimo nome.
+    - Podemos continuar usando o nome completo que continua funcionando.
+  - Desvantagens em utilizar HATEOAS: 
+    - Necessário atualizar o banco de dados para preencher os campos primeiro e último nome.
+    - Se não for atualizado no banco de dados será retornado todos os campos nulos para dados antigos.
+    - Existe uma maior complexidade nas classes Assembler
+
+#### Links Utilizados
+- Building REST services with Spring
+  - https://spring.io/guides/tutorials/rest/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
