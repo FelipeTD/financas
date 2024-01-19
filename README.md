@@ -126,6 +126,26 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
 - Building REST services with Spring
   - https://spring.io/guides/tutorials/rest/
 
+### Quinto Objetivo: Adicionar Testes Unitários
+- Será utilizado JUnit5 para os testes unitários
+- Explicação sobre o JUnit5
+  - Composto por JUnit Platform, JUnit Jupiter e JUnit Vintage
+    - JUnit Platform
+      - Define a API TestEngine para desenvolver novas estruturas de teste executados na plataforma.
+    - JUnit Jupiter
+      - Possui todas as novas anotações junit e a implementação TestEngine para executar testes escritos com essas anotações.
+    - JUnit Vintage
+      - Oferece suporte a execução de testes escritos em JUnit3 e JUnit4 na plataforma JUnit5.
+- Senti a necessidade de colocar um módulo service 
+  - Na minha opinião fica mais organizado os controladores chamarem o serviço.
+  - Dessa forma o serviço utiliza o repositório para pegar o que precisa no banco de dados.
+  - Quando for feita a validação nos testes unitários basta chamar o controlador.
+  - O controlador vai chamar o serviço e o serviço vai chamar o repositorio.
+
+#### Links Utilizados
+- Testando uma API Rest Spring Boot 2 com JUnit5 e MockMVC
+  - https://medium.com/@gcbrandao/testando-uma-api-rest-spring-boot-2-com-junit5-e-mockmvc-db603c65a306
+
 
 
 
