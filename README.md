@@ -52,3 +52,51 @@ Abaixo todos os passos feitos para adicionar o JPA ao projeto:
 #### Links Utilizados
 - Acessing Data with JPA
   - https://spring.io/guides/gs/accessing-data-jpa/
+
+### Terceiro Objetivo: Adicionar o MySQL ao projeto
+Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
+- Instalação do docker para subir uma imagem do MySQL.
+- Lembrando que para conseguir utilizar o Docker é necessário baixar o ubuntu para windows caso você utilizar WSL2.
+- Processo para configurar um banco MySQL no Docker
+  - Comando para criar container "docker run -p 3306:3306 --name=seu-container -d mysql/mysql-server"
+  - Comando para pegar senha gerada "docker logs seu-container 2>&1 | grep GENERATED"
+    - Recomendo executar comando utilizando o PowerShell
+  - Execute o comando "docker exec -it seu-container mysql -uroot -p"
+    - Cole a senha gerada no comando anterior
+    - Esse comando é utilizado para entrar no banco de dados
+  - Execute o comando "ALTER USER 'root'@'localhost' IDENTIFIED BY '12345';"
+    - Esse comando irá mudar a senha para '12345'.
+  - Execute o comando "update mysql.user set host = '%' where user='root';"
+    - Esse comando permite que realize a conexão pelo Workbench.
+  - Aperte Control + D para sair do banco e reinicie o container no docker.
+- Comando para executar dentro do MySQl para criação de usuário e banco de dados:
+  - "CREATE DATABASE FINANCAS;"
+    - Cria o banco de dados FINANCAS.
+  - create user 'tortora'@'%' identified by 'ftd38427689';
+    - Cria o usuário tortora com a senha ftd38427689.
+  - grant all on FINANCAS.* to 'tortora'@'%';
+    - Garante todas as permissões para o usuário tortora.
+- Configuração do arquivo application.properties
+  - O comando "pring.jpa.hibernate.ddl-auto" deve começar com create e depois update
+  - O comando "spring.jpa.show-sql" ajuda quando é necessário ver o SQL que é gerado.
+- Em relação ao código:
+  - Foi adicionado uma classe model User para guardar as informações do usuário.
+    - Essa classe também cria a entidade no banco de dados.
+  - Foi adicionado uma classe controller UserController para criar os endpoints do usuário.
+  - Foi adicionado uma interface UserRepository que extende o CrudRepository.
+    - Para ter acesso aos métodos do CrudRepository.
+  - No arquivo pom.xml foi necessário adicionar a dependencia do driver do MySQL
+
+#### Links Utilizados
+- Acessing Data with MySQL
+  - https://spring.io/guides/gs/accessing-data-mysql/
+- Download do Docker para subir uma imagem do MySQL
+  - https://www.docker.com/products/docker-desktop/
+- Imagem oficial do MySQL para Docker
+  - https://hub.docker.com/_/mysql
+- Download do MySQL Workbench
+  - https://dev.mysql.com/downloads/workbench/
+- Configuração do banco de dados para acessar pelo workbench
+  - https://dev.to/nfo94/como-criar-um-container-com-mysql-server-com-docker-e-conecta-lo-no-workbench-linux-1blf
+- Página com a dependência correta do MySQL
+  - https://stackoverflow.com/questions/33123985/cannot-load-driver-class-com-mysql-jdbc-driver-spring

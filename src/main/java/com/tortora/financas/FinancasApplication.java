@@ -21,6 +21,7 @@ public class FinancasApplication {
 	@Bean
 	public CommandLineRunner demo(CustomerRepository repository) {
 		return (args) -> {
+			/* Comentando por enquanto porque sempre que roda o servidor ele salva esses customers
 			// save a few customers
 			repository.save(new Customer("Jack", "Bauer"));
 			repository.save(new Customer("Chloe", "O'Brian"));
@@ -50,6 +51,7 @@ public class FinancasApplication {
 				log.info(bauer.toString());
 			});
 			log.info("");
+			 */
 		};
 	}
 
