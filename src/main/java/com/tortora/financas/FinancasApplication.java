@@ -1,7 +1,12 @@
 package com.tortora.financas;
 
+import com.tortora.financas.enums.Status;
 import com.tortora.financas.model.Customer;
+import com.tortora.financas.model.Employee;
+import com.tortora.financas.model.Order;
 import com.tortora.financas.repository.CustomerRepository;
+import com.tortora.financas.repository.EmployeeRepository;
+import com.tortora.financas.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -19,9 +24,30 @@ public class FinancasApplication {
 	}
 
 	@Bean
+	CommandLineRunner initDatabase(EmployeeRepository employeeRepository, OrderRepository orderRepository) {
+
+		return args -> {
+			employeeRepository.save(new Employee("Bilbo", "Baggins", "burglar"));
+			employeeRepository.save(new Employee("Frodo", "Baggins", "thief"));
+
+			employeeRepository.findAll().forEach(employee -> log.info("Preloaded " + employee));
+
+
+			orderRepository.save(new Order("MacBook Pro", Status.COMPLETED));
+			orderRepository.save(new Order("iPhone", Status.IN_PROGRESS));
+
+			orderRepository.findAll().forEach(order -> {
+				log.info("Preloaded " + order);
+			});
+
+		};
+	}
+
+	/* Comentando por enquanto porque sempre que roda o servidor ele salva esses customers
+	@Bean
 	public CommandLineRunner demo(CustomerRepository repository) {
 		return (args) -> {
-			/* Comentando por enquanto porque sempre que roda o servidor ele salva esses customers
+
 			// save a few customers
 			repository.save(new Customer("Jack", "Bauer"));
 			repository.save(new Customer("Chloe", "O'Brian"));
@@ -51,8 +77,9 @@ public class FinancasApplication {
 				log.info(bauer.toString());
 			});
 			log.info("");
-			 */
+
 		};
 	}
+	 */
 
 }
