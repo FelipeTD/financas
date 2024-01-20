@@ -145,6 +145,8 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - Algumas anotações do JUnit ajudam no momento do teste.
   - A parte má é que precisa saber como elas funcionam.
   - A parte boa é que consegue encontrar muitos exemplos na ‘internet’.
+- Centralizando o método stringAsJson dentro de uma classe Utils.
+  - Como era utilizado em vários lugares centralizei ela.
 
 #### Links Utilizados
 - Testando uma API Rest Spring Boot 2 com JUnit5 e MockMVC

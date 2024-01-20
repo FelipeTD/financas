@@ -1,6 +1,5 @@
 package com.tortora.financas;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tortora.financas.controller.EmployeeController;
 import com.tortora.financas.model.Employee;
 import com.tortora.financas.model.EmployeeModelAssembler;
@@ -17,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.tortora.financas.utils.TestUtils.asJsonString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,30 +34,6 @@ public class EmployeeTest {
     private EmployeeService service;
     @Spy
     private EmployeeModelAssembler assembler;
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Test
-    void newEmployeeTest() throws Exception {
-        Employee e = new Employee("Filipe", "Dias", "Programador");
-        EntityModel<Employee> employeeEntityModel = assembler.toModel(e);
-
-        when(service.saveEmployee(e)).thenReturn(employeeEntityModel);
-        this.mockMvc.perform(post("/employees")
-                        .content(asJsonString(e))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.firstName").exists());
-    }
-
 
     @Test
     void allEmployeesTest() throws Exception {
@@ -94,6 +70,21 @@ public class EmployeeTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value("Filipe"));
+    }
+
+    @Test
+    void newEmployeeTest() throws Exception {
+        Employee e = new Employee("Filipe", "Dias", "Programador");
+        EntityModel<Employee> employeeEntityModel = assembler.toModel(e);
+
+        when(service.saveEmployee(e)).thenReturn(employeeEntityModel);
+        this.mockMvc.perform(post("/employees")
+                        .content(asJsonString(e))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.firstName").exists());
     }
 
     @Test
