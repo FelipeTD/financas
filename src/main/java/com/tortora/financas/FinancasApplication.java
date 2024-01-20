@@ -23,6 +23,7 @@ public class FinancasApplication {
 		SpringApplication.run(FinancasApplication.class, args);
 	}
 
+	/* Como estamos testando com o JUnit estou comentando por enquanto
 	@Bean
 	CommandLineRunner initDatabase(EmployeeRepository employeeRepository, OrderRepository orderRepository) {
 
@@ -42,6 +43,7 @@ public class FinancasApplication {
 
 		};
 	}
+	 */
 
 	/* Comentando por enquanto porque sempre que roda o servidor ele salva esses customers
 	@Bean
