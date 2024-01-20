@@ -1,5 +1,6 @@
 package com.tortora.financas.controller;
 
+import com.tortora.financas.exceptions.OrderNotFoundException;
 import com.tortora.financas.model.Order;
 import com.tortora.financas.service.OrderService;
 import org.springframework.hateoas.CollectionModel;
@@ -34,8 +35,18 @@ public class OrderController {
     }
 
     @GetMapping("/orders/{id}")
-    public EntityModel<Order> oneOrder(@PathVariable Long id) {
-        return service.getOrderById(id);
+    public ResponseEntity<?> oneOrder(@PathVariable Long id) {
+        try {
+            EntityModel<Order> order = service.getEntityModelOrderById(id);
+            return ResponseEntity.ok(order);
+        } catch (OrderNotFoundException e) {
+            return ResponseEntity //
+                    .status(HttpStatus.NOT_FOUND) //
+                    .header(HttpHeaders.CONTENT_TYPE, MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE) //
+                    .body(Problem.create() //
+                            .withTitle("Order Not Found") //
+                            .withDetail(e.getMessage()));
+        }
     }
 
     @PostMapping("/orders")
@@ -49,8 +60,7 @@ public class OrderController {
 
     @DeleteMapping("/orders/{id}/cancel")
     public ResponseEntity<?> cancel(@PathVariable Long id) {
-        Order order = service.getOrderById(id).getContent();
-        assert order != null;
+        Order order = service.getOrderById(id);
 
         EntityModel<Order> response = service.cancelOrder(order);
 
@@ -64,8 +74,7 @@ public class OrderController {
 
     @PutMapping("/orders/{id}/complete")
     public ResponseEntity<?> complete(@PathVariable Long id) {
-        Order order = service.getOrderById(id).getContent();
-        assert order != null;
+        Order order = service.getOrderById(id);
 
         EntityModel<Order> response = service.completeOrder(order);
 

@@ -1,9 +1,12 @@
-package com.tortora.financas;
+package com.tortora.financas.controller;
 
-import com.tortora.financas.controller.EmployeeController;
+import com.tortora.financas.enums.Status;
+import com.tortora.financas.exceptions.EmployeeNotFoundException;
 import com.tortora.financas.model.Employee;
 import com.tortora.financas.model.EmployeeModelAssembler;
+import com.tortora.financas.model.Order;
 import com.tortora.financas.service.EmployeeService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(EmployeeController.class)
-public class EmployeeTest {
+public class EmployeeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,7 +42,7 @@ public class EmployeeTest {
     void allEmployeesTest() throws Exception {
 
         Employee e = new Employee("Filipe", "Dias", "Programador");
-        Employee e2 = new Employee("Debora", "Brandao", "Contadora");
+        Employee e2 = new Employee("Debora", null, "Contadora");
 
         List<Employee> employeeList = new ArrayList<>();
         employeeList.add(e);
@@ -58,7 +61,6 @@ public class EmployeeTest {
 
     }
 
-
     @Test
     void oneEmployeeTest() throws Exception {
         Employee e = new Employee("Filipe", "Dias", "Programador");
@@ -70,6 +72,16 @@ public class EmployeeTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value("Filipe"));
+    }
+
+    @Test
+    void oneEmployeeNotFoundTest() throws Exception {
+
+        when(service.getEmployeeById(1L)).thenThrow(EmployeeNotFoundException.class);
+        this.mockMvc.perform(get("/employees/{id}", 1)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -108,6 +120,55 @@ public class EmployeeTest {
     void deleteEmployeeTest() throws Exception {
         this.mockMvc.perform(delete("/employees/{id}", 1L))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void employeeToStringTest() {
+        Employee e = new Employee("Filipe", "Tortora", "Programador");
+        Assertions.assertEquals("Employee{id=null, firstName='Filipe', lastName='Tortora', role='Programador'}", e.toString());
+    }
+
+    @Test
+    void employeeHashCodeTest() {
+        Employee e = new Employee("Filipe", "Tortora", "Programador");
+        Assertions.assertEquals(1188514815, e.hashCode());
+    }
+
+    @Test
+    void employeeEqualsTest() {
+
+        // Objetos iguais
+        Employee e = new Employee("Filipe", "Tortora", "Programador");
+        e.setId(1L);
+        Employee e2 = new Employee("Filipe", "Tortora", "Programador");
+        e2.setId(1L);
+
+        // ID diferente
+        Employee e3 = new Employee("Filipe", "Tortora", "Programador");
+        e3.setId(2L);
+
+        // firstName diferente
+        Employee e4 = new Employee("Felipe", "Tortora", "Programador");
+        e4.setId(1L);
+
+        // lastName diferente
+        Employee e5 = new Employee("Filipe", "Dias", "Programador");
+        e5.setId(1L);
+
+        // role diferente
+        Employee e6 = new Employee("Filipe", "Tortora", "Analista");
+        e6.setId(1L);
+
+        // Objeto diferente
+        Order order = new Order("minha ordem", Status.IN_PROGRESS);
+
+        Assertions.assertEquals(e, e);
+        Assertions.assertNotEquals(e, order);
+        Assertions.assertEquals(e, e2);
+        Assertions.assertNotEquals(e, e3);
+        Assertions.assertNotEquals(e, e4);
+        Assertions.assertNotEquals(e, e5);
+        Assertions.assertNotEquals(e, e6);
     }
 
 }

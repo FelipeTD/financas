@@ -1,5 +1,6 @@
 package com.tortora.financas.service;
 
+import com.tortora.financas.exceptions.CustomerNotFoundException;
 import com.tortora.financas.exceptions.EmployeeNotFoundException;
 import com.tortora.financas.model.Employee;
 import com.tortora.financas.model.EmployeeModelAssembler;
@@ -8,6 +9,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,18 +34,22 @@ public class EmployeeService {
     }
 
     public EntityModel<Employee> getEmployeeById(Long id) {
-        Employee employee = repository.findById(id) //
-                .orElseThrow(() -> new EmployeeNotFoundException(id));
-        return assembler.toModel(employee);
+        Optional<Employee> employee = repository.findById(id);
+
+        if (employee.isPresent()) {
+            return assembler.toModel(employee.get());
+        } else {
+            throw new EmployeeNotFoundException(id);
+        }
     }
 
     public EntityModel<Employee> updateEmployee(Employee newEmployee, Long id) {
-        Employee updatedEmployee = repository.findById(id) //
+        Employee updatedEmployee = repository.findById(id)
                 .map(employee -> {
                     employee.setName(newEmployee.getName());
                     employee.setRole(newEmployee.getRole());
                     return repository.save(employee);
-                }) //
+                })
                 .orElseGet(() -> {
                     newEmployee.setId(id);
                     return repository.save(newEmployee);
@@ -52,7 +58,13 @@ public class EmployeeService {
     }
 
     public void deleteEmployeeById(Long id) {
-        repository.deleteById(id);
+        Optional<Employee> employee = repository.findById(id);
+
+        if (employee.isPresent()) {
+            repository.deleteById(id);
+        } else {
+            throw new EmployeeNotFoundException(id);
+        }
     }
 
 }
