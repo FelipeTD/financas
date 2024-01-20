@@ -141,11 +141,20 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - Dessa forma o serviço utiliza o repositório para pegar o que precisa no banco de dados.
   - Quando for feita a validação nos testes unitários basta chamar o controlador.
   - O controlador vai chamar o serviço e o serviço vai chamar o repositorio.
+- Os testes na classe Employee foi necessário colocar um Spy para conseguir retornar o valor do 'ModelAssembler'.
+  - Algumas anotações do JUnit ajudam no momento do teste.
+  - A parte má é que precisa saber como elas funcionam.
+  - A parte boa é que consegue encontrar muitos exemplos na ‘internet’.
 
 #### Links Utilizados
 - Testando uma API Rest Spring Boot 2 com JUnit5 e MockMVC
   - https://medium.com/@gcbrandao/testando-uma-api-rest-spring-boot-2-com-junit5-e-mockmvc-db603c65a306
-
+- CRUD JUnit Tests for Spring Data JPA - Testing Repository Layer
+  - https://www.javaguides.net/2021/07/crud-junit-tests-for-spring-data-jpa.html
+- Testing the Web Layer
+  - https://spring.io/guides/gs/testing-web/
+- Spring Boot MockMvc Example with @WebMvcTest
+  - https://howtodoinjava.com/spring-boot2/testing/spring-boot-mockmvc-example/
 
 
 
