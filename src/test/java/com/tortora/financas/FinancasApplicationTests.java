@@ -10,4 +10,9 @@ class FinancasApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	public void main() {
+		FinancasApplication.main(new String[] {});
+	}
+
 }

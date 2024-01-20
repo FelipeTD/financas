@@ -158,6 +158,37 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
 - Spring Boot MockMvc Example with @WebMvcTest
   - https://howtodoinjava.com/spring-boot2/testing/spring-boot-mockmvc-example/
 
+### Sexto Objetivo: Adicionar Coverage no projeto
+- Para adicionar um coverage basta adicionar o plugin do JaCoCo.
+- É possivel configurar as classes que quer excluir do relatório.
+- Atualmente o coverage está em 62%.
+- Deixar coverage acima de 80%.
+  - Analisar os cenários e criar testes para cobrir esses cenários
+  - A parte boa de aumentar a cobertura de testes é que precisa ajustar a lógica do método para cobrir alguns casos que não foram pensandos.
+  - Isso permite que aumente a robustez do projeto contra erros antes de seguir com o desenvolvimento.
+  - Coloquei uma regra dentro do JaCoCo para dar falha no build do projeto se o coverage estiver abaixo de 60%.
+  - Para testar hashCode que utiliza outra classe para construir o objeto utilizei null
+    - Exemplo: Order o = new Order("Minha ordem", null);
+    - Se utilizar a classe Status em cada execução de mvn clean install vai produzir um novo hashCode.
+  - Adicionado estrutura MVC para testar o customer.
+  - A ordem que realizo os testes é:
+    - Controller
+      - Testar caso positivo
+      - Testar exceções
+    - Model
+      - Testar métodos especificos como hashCode, toString e equals
+    - Services
+      - Testar caso positivo
+      - Testar exceções
+  - No final consegui deixar o projeto com 100% de coverage.
+
+#### Links Utilizados
+- Completude de testes com JaCoCo em aplicações Spring Boot
+  - https://mmarcosab.medium.com/completude-de-testes-com-jacoco-em-aplica%C3%A7%C3%B5es-spring-boot-74055773cc37
+- Exemplo de configuração JaCoCo com coverage de 60%
+  - https://www.eclemma.org/jacoco/trunk/doc/examples/build/pom.xml
+- Exemplo de teste de exceções com MvcMock
+  - https://www.baeldung.com/spring-mvc-test-exceptions
 
 
 

@@ -1,9 +1,7 @@
-package com.tortora.financas;
+package com.tortora.financas.controller;
 
-import com.tortora.financas.controller.UserController;
 import com.tortora.financas.model.User;
 import com.tortora.financas.service.UserService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,8 +9,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -23,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
-public class UserTest {
+public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -48,10 +44,12 @@ public class UserTest {
         User user = new User();
         user.setName("Filipe");
         user.setEmail("fedispato@gmail.com");
+        user.setId(1);
 
         User user2 = new User();
         user2.setName("Debora");
         user2.setEmail("debora@gmail.com");
+        user2.setId(2);
 
         List<User> users = new ArrayList<>();
         users.add(user);
@@ -61,7 +59,7 @@ public class UserTest {
         this.mockMvc.perform(get("/user/all"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("[{\"id\":null,\"name\":\"Filipe\",\"email\":\"fedispato@gmail.com\"},{\"id\":null,\"name\":\"Debora\",\"email\":\"debora@gmail.com\"}]")));
+                .andExpect(content().string(containsString("[{\"id\":1,\"name\":\"Filipe\",\"email\":\"fedispato@gmail.com\"},{\"id\":2,\"name\":\"Debora\",\"email\":\"debora@gmail.com\"}]")));
 
     }
 

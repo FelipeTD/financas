@@ -1,6 +1,5 @@
-package com.tortora.financas;
+package com.tortora.financas.controller;
 
-import com.tortora.financas.controller.GreetingController;
 import com.tortora.financas.service.GreetingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(GreetingController.class)
-public class GreetingTest {
+public class GreetingControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
