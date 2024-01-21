@@ -1,6 +1,5 @@
 package com.tortora.financas.service;
 
-import com.tortora.financas.exceptions.CustomerNotFoundException;
 import com.tortora.financas.exceptions.EmployeeNotFoundException;
 import com.tortora.financas.model.Employee;
 import com.tortora.financas.model.EmployeeModelAssembler;
@@ -65,6 +64,10 @@ public class EmployeeService {
         } else {
             throw new EmployeeNotFoundException(id);
         }
+    }
+
+    public void deleteAllEmployees() {
+        repository.deleteAll();
     }
 
 }

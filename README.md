@@ -190,6 +190,32 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
 - Exemplo de teste de exceções com MvcMock
   - https://www.baeldung.com/spring-mvc-test-exceptions
 
+### Sétimo Objetivo: Adicionar testes integrados
+- Testes integrados são testes para verificar se os componentes funcionam corretamente em conjunto.
+- Um exemplo de teste integrado nesse projeto:
+  - Cadastrar um ou mais funcionários.
+  - Buscar todos os funcionários cadastrados.
+  - Buscar o funcionário cadastrado por ID.
+  - Atualizar um funcionário.
+  - Deletar um funcionário.
+- Lembrando que o banco deve ficar da mesma forma que estava antes de o teste ser realizado.
+- Testes integrados também utilizam o JUnit.
+- Utilização do TestContainers para os testes de integração.
+  - O TestContainers utiliza o docker para criar uma imagem do MySQL e realizar os testes.
+  - Depois que os testes são concluidos essa instância é deletada.
+  - É uma excelente opção, pois não influência em nada no nosso banco de dados.
+
+
+#### Links Utilizados
+  - DevMedia (Utilizado como referência)
+    - https://www.devmedia.com.br/testes-de-integracao-com-java-e-junit/25662
+  - Obter o Size de um Iterable em Java
+    - https://receitasdecodigo.com.br/java/obter-o-size-de-um-iterable-em-java
+  - Spring Boot MySQL integration tests with Testcontainers
+    - https://www.geekyhacker.com/spring-boot-mysql-integration-tests-with-testcontainers/
+  - Getting started with Testcontainers in a Java Spring Boot Project
+    - https://testcontainers.com/guides/testing-spring-boot-rest-api-using-testcontainers/
+
 
 
 

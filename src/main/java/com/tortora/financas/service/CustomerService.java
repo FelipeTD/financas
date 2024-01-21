@@ -1,8 +1,10 @@
 package com.tortora.financas.service;
 
 import com.tortora.financas.exceptions.CustomerNotFoundException;
+import com.tortora.financas.exceptions.EmployeeNotFoundException;
 import com.tortora.financas.model.Customer;
 import com.tortora.financas.model.CustomerModelAssembler;
+import com.tortora.financas.model.Employee;
 import com.tortora.financas.repository.CustomerRepository;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,20 @@ public class CustomerService {
 
     public EntityModel<Customer> saveCustomer(Customer newCustomer) {
         return assembler.toModel(repository.save(newCustomer));
+    }
+
+    public void deleteCustomerById(Long id) {
+        Optional<Customer> customer = repository.findById(id);
+
+        if (customer.isPresent()) {
+            repository.deleteById(id);
+        } else {
+            throw new CustomerNotFoundException(id);
+        }
+    }
+
+    public void deleteAllCustomers() {
+        repository.deleteAll();
     }
 
 }

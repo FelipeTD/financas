@@ -24,6 +24,11 @@ public class OrderService {
         this.assembler = assembler;
     }
 
+    public EntityModel<Order> saveOrder(Order order) {
+        order.setStatus(Status.IN_PROGRESS);
+        return assembler.toModel(repository.save(order));
+    }
+
     public List<EntityModel<Order>> getOrders() {
         return repository.findAll().stream() //
                 .map(assembler::toModel) //
@@ -41,18 +46,7 @@ public class OrderService {
     }
 
     public EntityModel<Order> getEntityModelOrderById(Long id) {
-        Optional<Order> order = repository.findById(id);
-
-        if (order.isPresent()) {
-            return assembler.toModel(order.get());
-        } else {
-            throw new OrderNotFoundException(id);
-        }
-    }
-
-    public EntityModel<Order> saveOrder(Order order) {
-        order.setStatus(Status.IN_PROGRESS);
-        return assembler.toModel(repository.save(order));
+        return assembler.toModel(getOrderById(id));
     }
 
     public EntityModel<Order> cancelOrder(Order order) {
@@ -71,6 +65,10 @@ public class OrderService {
         }
 
         return null;
+    }
+
+    public void deleteAllOrders() {
+        repository.deleteAll();
     }
 
 }
