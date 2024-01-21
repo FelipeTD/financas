@@ -114,4 +114,16 @@ public class OrderIntegrationTest {
         Assertions.assertEquals(Status.COMPLETED, currentOrder.getStatus());
     }
 
+    @Test
+    @org.junit.jupiter.api.Order(7)
+    void haveToGetAllOrdersInProgress() {
+        service.saveOrder(new Order("Ordem 1", Status.IN_PROGRESS));
+        service.saveOrder(new Order("Ordem 2", Status.IN_PROGRESS));
+        // Pegadinha kkkk. O saveOrder sempre altera o status para IN_PROGRESS então serão 3 itens na lista
+        service.saveOrder(new Order("Ordem 3", Status.CANCELLED));
+        List<EntityModel<Order>> orderList = service.getOrdersByStatus(Status.IN_PROGRESS);
+
+        Assertions.assertEquals(3, orderList.size());
+    }
+
 }

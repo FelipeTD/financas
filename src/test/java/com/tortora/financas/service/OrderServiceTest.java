@@ -41,6 +41,19 @@ public class OrderServiceTest {
     }
 
     @Test
+    void getOrdersByStatus() {
+        Order o = new Order("Minha primeira ordem", Status.IN_PROGRESS);
+        Order o2 = new Order("Minha segunda ordem", Status.IN_PROGRESS);
+        List<Order> list = new ArrayList<>();
+        list.add(o);
+        list.add(o2);
+
+        when(repository.findOrderByStatus(Status.IN_PROGRESS)).thenReturn(list);
+        List<EntityModel<Order>> response = service.getOrdersByStatus(Status.IN_PROGRESS);
+        Assertions.assertEquals(2, response.size());
+    }
+
+    @Test
     void getOrderByIdTest() {
         Optional<Order> o = Optional.of(new Order("Minha ordem", Status.IN_PROGRESS));
 

@@ -1,5 +1,6 @@
 package com.tortora.financas.controller;
 
+import com.tortora.financas.enums.Status;
 import com.tortora.financas.exceptions.OrderNotFoundException;
 import com.tortora.financas.model.Order;
 import com.tortora.financas.service.OrderService;
@@ -28,10 +29,10 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public CollectionModel<EntityModel<Order>> allOrders() {
+    public ResponseEntity<CollectionModel<EntityModel<Order>>> allOrders() {
         List<EntityModel<Order>> orders = service.getOrders();
-        return CollectionModel.of(orders, //
-                linkTo(methodOn(OrderController.class).allOrders()).withSelfRel());
+        return ResponseEntity.ok(CollectionModel.of(orders, //
+                linkTo(methodOn(OrderController.class).allOrders()).withSelfRel()));
     }
 
     @GetMapping("/orders/{id}")
@@ -47,6 +48,13 @@ public class OrderController {
                             .withTitle("Order Not Found") //
                             .withDetail(e.getMessage()));
         }
+    }
+
+    @GetMapping("/orders/status/{status}")
+    public ResponseEntity<CollectionModel<EntityModel<Order>>> ordersByStatus(@PathVariable Status status) {
+        List<EntityModel<Order>> orders = service.getOrdersByStatus(status);
+        return ResponseEntity.ok(CollectionModel.of(orders,
+                linkTo(methodOn(OrderController.class).allOrders()).withSelfRel()));
     }
 
     @PostMapping("/orders")
