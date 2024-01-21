@@ -1,9 +1,8 @@
-package com.tortora.financas.services;
+package com.tortora.financas.service;
 
 import com.tortora.financas.exceptions.CustomerNotFoundException;
 import com.tortora.financas.model.Customer;
 import com.tortora.financas.repository.CustomerRepository;
-import com.tortora.financas.service.CustomerService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +76,30 @@ public class CustomerServiceTest {
             service.getCustomerById(1L);
         } catch (CustomerNotFoundException e) {
             Assertions.assertEquals("Could not find customer 1", e.getMessage());
+        }
+    }
+
+    @Test
+    void deleteCustomerByIdTest() {
+        Optional<Customer> e = Optional.of(new Customer("Filipe", "Tortora"));
+
+        when(repository.findById(1L)).thenReturn(e);
+
+        try {
+            service.deleteCustomerById(1L);
+        } catch (CustomerNotFoundException exception) {
+            Assertions.assertEquals("Could not find customer 1", exception.getMessage());
+        }
+    }
+
+    @Test
+    void deleteCustomerByIdCustomerNotFoundTest() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        try {
+            service.deleteCustomerById(1L);
+        } catch (CustomerNotFoundException exception) {
+            Assertions.assertEquals("Could not find customer 1", exception.getMessage());
         }
     }
 

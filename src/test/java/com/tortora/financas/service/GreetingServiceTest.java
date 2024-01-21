@@ -1,6 +1,5 @@
-package com.tortora.financas.services;
+package com.tortora.financas.service;
 
-import com.tortora.financas.service.GreetingService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

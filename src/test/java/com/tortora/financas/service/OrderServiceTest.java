@@ -1,12 +1,9 @@
-package com.tortora.financas.services;
+package com.tortora.financas.service;
 
 import com.tortora.financas.enums.Status;
-import com.tortora.financas.exceptions.EmployeeNotFoundException;
 import com.tortora.financas.exceptions.OrderNotFoundException;
-import com.tortora.financas.model.Employee;
 import com.tortora.financas.model.Order;
 import com.tortora.financas.repository.OrderRepository;
-import com.tortora.financas.service.OrderService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

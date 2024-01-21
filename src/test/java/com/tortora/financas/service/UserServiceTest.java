@@ -1,8 +1,7 @@
-package com.tortora.financas.services;
+package com.tortora.financas.service;
 
 import com.tortora.financas.model.User;
 import com.tortora.financas.repository.UserRepository;
-import com.tortora.financas.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
