@@ -1,7 +1,6 @@
 package com.tortora.financas.service;
 
 import com.tortora.financas.enums.Status;
-import com.tortora.financas.exceptions.EmployeeNotFoundException;
 import com.tortora.financas.exceptions.OrderNotFoundException;
 import com.tortora.financas.model.Order;
 import com.tortora.financas.model.OrderModelAssembler;
@@ -65,6 +64,12 @@ public class OrderService {
         }
 
         return null;
+    }
+
+    public List<EntityModel<Order>> getOrdersByStatus(Status status) {
+        return repository.findOrderByStatus(status).stream() //
+                .map(assembler::toModel) //
+                .collect(Collectors.toList());
     }
 
     public void deleteAllOrders() {

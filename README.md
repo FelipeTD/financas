@@ -216,6 +216,24 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - Getting started with Testcontainers in a Java Spring Boot Project
     - https://testcontainers.com/guides/testing-spring-boot-rest-api-using-testcontainers/
 
+### Oitavo Objetivo: Modelagem de dados e UML
+- Se utiliza o Intellij Community a melhor opção é o PlantUML.
+  - É um plugin que gera alguns diagramas UML para você.
+- Se utiliza o Intellij Ultimate ele já vem com uma opção de diagramas.
+  - Pasta clicar com o botão direito no módulo ou classe que quer observar os diagramas.
+- Quando um projeto é construido tem que considerar o UML para entender o que cada parte do código faz.
+- A modelagem de dados é tão importante quanto.
+  - Ao utilizá-la você deve considerar:
+    - Quais objetos precisam ser criados?
+    - Como os objetos irão se relacionar?
+    - Entre outras considerações.
+
+#### Links Utilizados
+- PlantUML Diagram Generator
+  - https://plugins.jetbrains.com/plugin/15991-plantuml-diagram-generator
+- UltimateUML class diagrams
+  - https://www.jetbrains.com/help/idea/class-diagram.html
+
 
 
 

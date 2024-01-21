@@ -62,6 +62,32 @@ public class OrderControllerTest {
     }
 
     @Test
+    void ordersByStatusTest() throws Exception {
+        Order o = new Order("Tenis Adidas", Status.IN_PROGRESS);
+        Order o2 = new Order("Iphone", Status.IN_PROGRESS);
+
+        List<Order> orderList = new ArrayList<>();
+        orderList.add(o);
+        orderList.add(o2);
+
+        List<EntityModel<Order>> entityModelOrderList = orderList.stream() //
+                .map(assembler::toModel).toList();
+
+        List<String> expectedList = new ArrayList<>();
+        expectedList.add("IN_PROGRESS");
+        expectedList.add("IN_PROGRESS");
+
+        when(service.getOrdersByStatus(Status.IN_PROGRESS)).thenReturn(entityModelOrderList);
+        this.mockMvc.perform(get("/orders/status/{status}", Status.IN_PROGRESS)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._embedded.orderList").exists())
+                .andExpect(jsonPath("$._embedded.orderList[*].description").exists())
+                .andExpect(jsonPath("$._embedded.orderList[*].status").value(expectedList));
+    }
+
+    @Test
     void oneOrderTest() throws Exception {
         Order o = new Order("Tenis Adidas", Status.IN_PROGRESS);
         o.setId(1L);
