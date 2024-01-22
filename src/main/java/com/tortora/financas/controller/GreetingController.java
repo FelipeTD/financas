@@ -8,15 +8,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class GreetingController {
 
-    private final GreetingService service;
+    private final GreetingService greetingService;
 
-    public GreetingController(GreetingService service) {
-        this.service = service;
+    public GreetingController(GreetingService greetingService) {
+        this.greetingService = greetingService;
     }
 
     @RequestMapping("/greeting")
     public @ResponseBody String greeting() {
-        return service.greet();
+        return greetingService.greet();
     }
 
 }

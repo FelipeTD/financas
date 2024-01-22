@@ -22,44 +22,44 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class EmployeeController {
 
-    private final EmployeeService service;
+    private final EmployeeService employeeService;
 
-    EmployeeController(EmployeeService service) {
-        this.service = service;
+    EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/employees")
     public CollectionModel<EntityModel<Employee>> allEmployees() {
-        List<EntityModel<Employee>> employees = service.getEmployees();
+        List<EntityModel<Employee>> employees = employeeService.getEmployees();
         return CollectionModel.of(employees, linkTo(methodOn(EmployeeController.class)
                 .allEmployees())
                 .withSelfRel());
     }
 
     @PostMapping("/employees")
-    ResponseEntity<?> newEmployee(@RequestBody Employee newEmployee) {
-        EntityModel<Employee> entityModel = service.saveEmployee(newEmployee);
+    ResponseEntity<?> addNewEmployee(@RequestBody Employee newEmployee) {
+        EntityModel<Employee> entityModel = employeeService.saveEmployee(newEmployee);
         return ResponseEntity //
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
                 .body(entityModel);
     }
 
-    @GetMapping("/employees/{id}")
-    public EntityModel<Employee> oneEmployee(@PathVariable Long id) {
-        return service.getEmployeeById(id);
+    @GetMapping("/employees/{employeeId}")
+    public EntityModel<Employee> oneEmployeeById(@PathVariable Long employeeId) {
+        return employeeService.getEmployeeById(employeeId);
     }
 
-    @PutMapping("/employees/{id}")
-    ResponseEntity<?> replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
-        EntityModel<Employee> entityModel = service.updateEmployee(newEmployee, id);
+    @PutMapping("/employees/{employeeId}")
+    ResponseEntity<?> replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long employeeId) {
+        EntityModel<Employee> entityModel = employeeService.updateEmployee(newEmployee, employeeId);
         return ResponseEntity //
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
                 .body(entityModel);
     }
 
-    @DeleteMapping("/employees/{id}")
-    ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
-        service.deleteEmployeeById(id);
+    @DeleteMapping("/employees/{employeeId}")
+    ResponseEntity<?> deleteEmployee(@PathVariable Long employeeId) {
+        employeeService.deleteEmployeeById(employeeId);
         return ResponseEntity.noContent().build();
     }
 

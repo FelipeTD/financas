@@ -46,7 +46,7 @@ Abaixo todos os passos feitos para adicionar o JPA ao projeto:
 - Foi criada uma interface CustomerRepository que extende CrudRepository.
 - Essa ‘interface’ foi utilizada para chamar os métodos findByLastName e findById do CrudRepository.
 - Na classe FinancasApplication fizemos um método demo() para testar o código.
-- Gerando um arquivo JAR com o comando 'mvn clean package'.
+- Gerando um arquivo JAR com o comando `mvn clean package`.
 - Teste realizado com o JAR gerado para garantir que continua tudo funcionando.
 
 #### Links Utilizados
@@ -65,27 +65,27 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
     - Cole a senha gerada no comando anterior
     - Esse comando é utilizado para entrar no banco de dados
   - Execute o comando "ALTER USER 'root'@'localhost' IDENTIFIED BY '12345';"
-    - Esse comando irá mudar a senha para '12345'.
-  - Execute o comando "update mysql.user set host = '%' where user='root';"
+    - Esse comando irá mudar a senha para `12345`.
+  - Execute o comando `update mysql.user set host = '%' where user='root';`
     - Esse comando permite que realize a conexão pelo Workbench.
   - Aperte Control + D para sair do banco e reinicie o container no docker.
-- Comando para executar dentro do MySQl para criação de usuário e banco de dados:
+- Comando para executar dentro do MySQL para criação de utilizador e banco de dados:
   - "CREATE DATABASE FINANCAS;"
     - Cria o banco de dados FINANCAS.
   - create user 'tortora'@'%' identified by 'ftd38427689';
-    - Cria o usuário tortora com a senha ftd38427689.
+    - Cria o utilizador tortora com a senha ftd38427689.
   - grant all on FINANCAS.* to 'tortora'@'%';
-    - Garante todas as permissões para o usuário tortora.
+    - Garante todas as permissões para o utilizador tortora.
 - Configuração do arquivo application.properties
-  - O comando "pring.jpa.hibernate.ddl-auto" deve começar com create e depois update
-  - O comando "spring.jpa.show-sql" ajuda quando é necessário ver o SQL que é gerado.
+  - O comando "pring.jpa.hibernate.ddl-auto" deve começar com create e depois ‘update’
+  - O comando `spring.jpa.show-sql` ajuda quando é necessário ver o SQL que é gerado.
 - Em relação ao código:
-  - Foi adicionado uma classe model User para guardar as informações do usuário.
+  - Foi adicionado uma classe model User para guardar as informações do utilizador.
     - Essa classe também cria a entidade no banco de dados.
   - Foi adicionado uma classe controller UserController para criar os endpoints do usuário.
   - Foi adicionado uma interface UserRepository que extende o CrudRepository.
     - Para ter acesso aos métodos do CrudRepository.
-  - No arquivo pom.xml foi necessário adicionar a dependencia do driver do MySQL
+  - No arquivo pom.xml foi necessário adicionar a dependencia do `driver do MySQL`
 
 #### Links Utilizados
 - Acessing Data with MySQL
@@ -139,14 +139,14 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
 - Senti a necessidade de colocar um módulo service 
   - Na minha opinião fica mais organizado os controladores chamarem o serviço.
   - Dessa forma o serviço utiliza o repositório para pegar o que precisa no banco de dados.
-  - Quando for feita a validação nos testes unitários basta chamar o controlador.
+  - Quando for feita a validação nos testes unitários basta chamar o controlador
   - O controlador vai chamar o serviço e o serviço vai chamar o repositorio.
 - Os testes na classe Employee foi necessário colocar um Spy para conseguir retornar o valor do 'ModelAssembler'.
   - Algumas anotações do JUnit ajudam no momento do teste.
   - A parte má é que precisa saber como elas funcionam.
   - A parte boa é que consegue encontrar muitos exemplos na ‘internet’.
 - Centralizando o método stringAsJson dentro de uma classe Utils.
-  - Como era utilizado em vários lugares centralizei ela.
+  - Como era utilizado em vários lugares centralizei ela
 
 #### Links Utilizados
 - Testando uma API Rest Spring Boot 2 com JUnit5 e MockMVC
@@ -169,7 +169,7 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - Coloquei uma regra dentro do JaCoCo para dar falha no build do projeto se o coverage estiver abaixo de 60%.
   - Para testar hashCode que utiliza outra classe para construir o objeto utilizei null
     - Exemplo: Order o = new Order("Minha ordem", null);
-    - Se utilizar a classe Status em cada execução de mvn clean install vai produzir um novo hashCode.
+    - Se utilizar o objeto `Status` em cada execução de mvn clean install vai produzir um novo hashCode.
   - Adicionado estrutura MVC para testar o customer.
   - A ordem que realizo os testes é:
     - Controller
@@ -221,7 +221,7 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - É um plugin que gera alguns diagramas UML para você.
 - Se utiliza o Intellij Ultimate ele já vem com uma opção de diagramas.
   - Pasta clicar com o botão direito no módulo ou classe que quer observar os diagramas.
-- Quando um projeto é construido tem que considerar o UML para entender o que cada parte do código faz.
+- Quando um projeto é construido tem que considerar o UML para entender o que cada parte do código faz
 - A modelagem de dados é tão importante quanto.
   - Ao utilizá-la você deve considerar:
     - Quais objetos precisam ser criados?
@@ -233,6 +233,53 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - https://plugins.jetbrains.com/plugin/15991-plantuml-diagram-generator
 - UltimateUML class diagrams
   - https://www.jetbrains.com/help/idea/class-diagram.html
+
+### Nono Objetivo: POO, SOLID, Clean Code e Design Patterns
+- Já fizemos bastante codificação e o projeto está bem organizado.
+- Podemos falar um pouco sobre boas práticas de programação.
+- POO
+  - Como utilizando o conceito de classes em Java aplicamos o conceito POO
+  - Esses objetos possuem atributos e métodos.
+  - No caso das entidades temos os atributos e métodos para acessar esses atributos.
+- SOLID
+  - S — Single Responsiblity Principle
+    - Controller para gerenciar os endpoints
+    - Service para executar a lógica de negócio
+    - Repository para buscar os dados no banco
+  - O — Open-Closed Principle
+    - Repository extend a class JpaRepository e tem todos os métodos que precisa
+  - L — Liskov Substitution Principle
+    - Esse principio não foi utilizado
+  - I — Interface Segregation Principle
+    - Nenhuma classe é forçada a implementar um método que não irá utilizar
+  - D — Dependency Inversion Principle
+    - Um ótimo exemplo é o repository
+    - Mesmo que eu troque o banco para Oracle os comando continuam funcionando corretamente
+- Clean Code
+  - Regras aplicadas
+    - Manter uma nomenclatura de fácil entendimento para as variáveis, funções, parâmetros, classes e métodos
+    - Deixe o seu código mais limpo do que quando você o pegou.
+    - Crie funções pequenas. Se puder deixe mais pequenas ainda.
+    - Não repita o código. Não deve existir duas partes do programa desempenhando a mesma função.
+    - Comente apenas o necessário. Nada de comentários desnecessários.
+    - Saber tratar os erros da aplicação
+    - Testes limpos. Testes devem ser rápidos e testar o necessário.
+- Design Patterns
+- Já existem diversos `Design Patterns` que são utilizados pelo Spring Boot
+- Abaixo listo os que foram utilizados nesse projeto:
+  - Inversão de Controle (IoC) e Injeção de Dependência (DI)
+  - Padrão 'MVC'
+  - Padrão Repository
+  - Padrão Singleton
+
+#### Links Utilizados
+- O que é SOLID: O guia completo para você entender os 5 princípios da POO
+  - https://medium.com/desenvolvendo-com-paixao/o-que-%C3%A9-solid-o-guia-completo-para-voc%C3%AA-entender-os-5-princ%C3%ADpios-da-poo-2b937b3fc530
+- Alguns dos principais Padrões de Projeto presentes no Spring Boot
+  - https://www.dio.me/articles/alguns-dos-principais-padroes-de-projeto-presentes-no-spring-boot
+- O que é Clean Code e Quais são Suas Regras Básicas?
+  - https://blog.accurate.com.br/clean-code/
+			
 
 
 

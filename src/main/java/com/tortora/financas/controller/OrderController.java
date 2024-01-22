@@ -22,23 +22,23 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class OrderController {
 
-    private final OrderService service;
+    private final OrderService orderService;
 
-    OrderController(OrderService service) {
-        this.service = service;
+    OrderController(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     @GetMapping("/orders")
     public ResponseEntity<CollectionModel<EntityModel<Order>>> allOrders() {
-        List<EntityModel<Order>> orders = service.getOrders();
+        List<EntityModel<Order>> orders = orderService.getOrders();
         return ResponseEntity.ok(CollectionModel.of(orders, //
                 linkTo(methodOn(OrderController.class).allOrders()).withSelfRel()));
     }
 
-    @GetMapping("/orders/{id}")
-    public ResponseEntity<?> oneOrder(@PathVariable Long id) {
+    @GetMapping("/orders/{orderId}")
+    public ResponseEntity<?> oneOrderById(@PathVariable Long orderId) {
         try {
-            EntityModel<Order> order = service.getEntityModelOrderById(id);
+            EntityModel<Order> order = orderService.getEntityModelOrderById(orderId);
             return ResponseEntity.ok(order);
         } catch (OrderNotFoundException e) {
             return ResponseEntity //
@@ -52,27 +52,27 @@ public class OrderController {
 
     @GetMapping("/orders/status/{status}")
     public ResponseEntity<CollectionModel<EntityModel<Order>>> ordersByStatus(@PathVariable Status status) {
-        List<EntityModel<Order>> orders = service.getOrdersByStatus(status);
+        List<EntityModel<Order>> orders = orderService.getOrdersByStatus(status);
         return ResponseEntity.ok(CollectionModel.of(orders,
                 linkTo(methodOn(OrderController.class).allOrders()).withSelfRel()));
     }
 
     @PostMapping("/orders")
-    ResponseEntity<EntityModel<Order>> newOrder(@RequestBody Order order) {
-        EntityModel<Order> newOrder = service.saveOrder(order);
+    ResponseEntity<EntityModel<Order>> addNewOrder(@RequestBody Order order) {
+        EntityModel<Order> newOrder = orderService.saveOrder(order);
 
         return ResponseEntity //
-                .created(linkTo(methodOn(OrderController.class).oneOrder(Objects.requireNonNull(newOrder.getContent()).getId())).toUri()) //
+                .created(linkTo(methodOn(OrderController.class).oneOrderById(Objects.requireNonNull(newOrder.getContent()).getId())).toUri()) //
                 .body(newOrder);
     }
 
-    @DeleteMapping("/orders/{id}/cancel")
-    public ResponseEntity<?> cancel(@PathVariable Long id) {
-        Order order = service.getOrderById(id);
+    @DeleteMapping("/orders/{orderId}/cancel")
+    public ResponseEntity<?> cancel(@PathVariable Long orderId) {
+        Order order = orderService.getOrderById(orderId);
 
-        EntityModel<Order> response = service.cancelOrder(order);
+        EntityModel<Order> orderResponse = orderService.cancelOrder(order);
 
-        return response != null ? ResponseEntity.ok(response) : ResponseEntity //
+        return orderResponse != null ? ResponseEntity.ok(orderResponse) : ResponseEntity //
                 .status(HttpStatus.METHOD_NOT_ALLOWED) //
                 .header(HttpHeaders.CONTENT_TYPE, MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE) //
                 .body(Problem.create() //
@@ -80,13 +80,13 @@ public class OrderController {
                         .withDetail("You can't cancel an order that is in the " + order.getStatus() + " status"));
     }
 
-    @PutMapping("/orders/{id}/complete")
-    public ResponseEntity<?> complete(@PathVariable Long id) {
-        Order order = service.getOrderById(id);
+    @PutMapping("/orders/{orderId}/complete")
+    public ResponseEntity<?> complete(@PathVariable Long orderId) {
+        Order order = orderService.getOrderById(orderId);
 
-        EntityModel<Order> response = service.completeOrder(order);
+        EntityModel<Order> orderResponse = orderService.completeOrder(order);
 
-        return response != null ? ResponseEntity.ok(response) : ResponseEntity //
+        return orderResponse != null ? ResponseEntity.ok(orderResponse) : ResponseEntity //
                 .status(HttpStatus.METHOD_NOT_ALLOWED) //
                 .header(HttpHeaders.CONTENT_TYPE, MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE) //
                 .body(Problem.create() //

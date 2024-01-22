@@ -1,10 +1,8 @@
 package com.tortora.financas.service;
 
 import com.tortora.financas.exceptions.CustomerNotFoundException;
-import com.tortora.financas.exceptions.EmployeeNotFoundException;
 import com.tortora.financas.model.Customer;
 import com.tortora.financas.model.CustomerModelAssembler;
-import com.tortora.financas.model.Employee;
 import com.tortora.financas.repository.CustomerRepository;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
@@ -16,53 +14,53 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerService {
 
-    private final CustomerRepository repository;
+    private final CustomerRepository customerRepository;
 
-    private final CustomerModelAssembler assembler;
+    private final CustomerModelAssembler customerModelAssembler;
 
-    public CustomerService(CustomerRepository repository, CustomerModelAssembler assembler) {
-        this.repository = repository;
-        this.assembler = assembler;
+    public CustomerService(CustomerRepository customerRepository, CustomerModelAssembler customerModelAssembler) {
+        this.customerRepository = customerRepository;
+        this.customerModelAssembler = customerModelAssembler;
     }
 
     public List<EntityModel<Customer>> getCustomers() {
-        return repository.findAll().stream()
-                .map(assembler::toModel)
+        return customerRepository.findAll().stream()
+                .map(customerModelAssembler::toModel)
                 .collect(Collectors.toList());
     }
 
-    public EntityModel<Customer> getCustomerById(Long id) {
-        Optional<Customer> customer = repository.findById(id);
+    public EntityModel<Customer> getCustomerById(Long customerId) {
+        Optional<Customer> customer = customerRepository.findById(customerId);
 
         if (customer.isPresent()) {
-            return assembler.toModel(customer.get());
+            return customerModelAssembler.toModel(customer.get());
         } else {
-            throw new CustomerNotFoundException(id);
+            throw new CustomerNotFoundException(customerId);
         }
     }
 
-    public List<EntityModel<Customer>> getCustomersByLastName(String lastName) {
-        return repository.findByLastName(lastName).stream()
-                .map(assembler::toModel)
+    public List<EntityModel<Customer>> getCustomersByLastName(String customerLastName) {
+        return customerRepository.findByLastName(customerLastName).stream()
+                .map(customerModelAssembler::toModel)
                 .collect(Collectors.toList());
     }
 
     public EntityModel<Customer> saveCustomer(Customer newCustomer) {
-        return assembler.toModel(repository.save(newCustomer));
+        return customerModelAssembler.toModel(customerRepository.save(newCustomer));
     }
 
-    public void deleteCustomerById(Long id) {
-        Optional<Customer> customer = repository.findById(id);
+    public void deleteCustomerById(Long customerId) {
+        Optional<Customer> customer = customerRepository.findById(customerId);
 
         if (customer.isPresent()) {
-            repository.deleteById(id);
+            customerRepository.deleteById(customerId);
         } else {
-            throw new CustomerNotFoundException(id);
+            throw new CustomerNotFoundException(customerId);
         }
     }
 
     public void deleteAllCustomers() {
-        repository.deleteAll();
+        customerRepository.deleteAll();
     }
 
 }
