@@ -15,65 +15,63 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
 
-    private final OrderRepository repository;
-    private final OrderModelAssembler assembler;
+    private final OrderRepository orderRepository;
+    private final OrderModelAssembler orderModelAssembler;
 
-    public OrderService(OrderRepository orderRepository, OrderModelAssembler assembler) {
-        this.repository = orderRepository;
-        this.assembler = assembler;
+    public OrderService(OrderRepository orderRepository, OrderModelAssembler orderModelAssembler) {
+        this.orderRepository = orderRepository;
+        this.orderModelAssembler = orderModelAssembler;
     }
 
     public EntityModel<Order> saveOrder(Order order) {
         order.setStatus(Status.IN_PROGRESS);
-        return assembler.toModel(repository.save(order));
+        return orderModelAssembler.toModel(orderRepository.save(order));
     }
 
     public List<EntityModel<Order>> getOrders() {
-        return repository.findAll().stream() //
-                .map(assembler::toModel) //
+        return orderRepository.findAll().stream() //
+                .map(orderModelAssembler::toModel) //
                 .collect(Collectors.toList());
     }
 
-    public Order getOrderById(Long id) {
-        Optional<Order> order = repository.findById(id);
+    public Order getOrderById(Long orderId) {
+        Optional<Order> order = orderRepository.findById(orderId);
 
         if (order.isPresent()) {
             return order.get();
         } else {
-            throw new OrderNotFoundException(id);
+            throw new OrderNotFoundException(orderId);
         }
     }
 
-    public EntityModel<Order> getEntityModelOrderById(Long id) {
-        return assembler.toModel(getOrderById(id));
+    public EntityModel<Order> getEntityModelOrderById(Long orderId) {
+        return orderModelAssembler.toModel(getOrderById(orderId));
     }
 
     public EntityModel<Order> cancelOrder(Order order) {
-        if (order.getStatus() == Status.IN_PROGRESS) {
-            order.setStatus(Status.CANCELLED);
-            return assembler.toModel(repository.save(order));
-        }
-
-        return null;
+        return executeOrder(order, Status.CANCELLED);
     }
 
     public EntityModel<Order> completeOrder(Order order) {
-        if (order.getStatus() == Status.IN_PROGRESS) {
-            order.setStatus(Status.COMPLETED);
-            return assembler.toModel(repository.save(order));
-        }
-
-        return null;
+        return executeOrder(order, Status.COMPLETED);
     }
 
     public List<EntityModel<Order>> getOrdersByStatus(Status status) {
-        return repository.findOrderByStatus(status).stream() //
-                .map(assembler::toModel) //
+        return orderRepository.findOrderByStatus(status).stream() //
+                .map(orderModelAssembler::toModel) //
                 .collect(Collectors.toList());
     }
 
     public void deleteAllOrders() {
-        repository.deleteAll();
+        orderRepository.deleteAll();
+    }
+
+    private EntityModel<Order> executeOrder(Order order, Status status) {
+        if (order.getStatus() == Status.IN_PROGRESS) {
+            order.setStatus(status);
+            return orderModelAssembler.toModel(orderRepository.save(order));
+        }
+        return null;
     }
 
 }

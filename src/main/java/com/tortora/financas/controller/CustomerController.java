@@ -16,44 +16,44 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class CustomerController {
 
-    private final CustomerService service;
+    private final CustomerService customerService;
 
-    CustomerController(CustomerService service) {
-        this.service = service;
+    CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
-    @GetMapping("/customers/{id}")
-    public EntityModel<Customer> oneCustomer(@PathVariable Long id) {
-        return service.getCustomerById(id);
+    @GetMapping("/customers/{customerId}")
+    public EntityModel<Customer> oneCustomerById(@PathVariable Long customerId) {
+        return customerService.getCustomerById(customerId);
     }
 
     @GetMapping("/customers")
     public CollectionModel<EntityModel<Customer>> allCustomers() {
-        List<EntityModel<Customer>> customers = service.getCustomers();
+        List<EntityModel<Customer>> customers = customerService.getCustomers();
         return CollectionModel.of(customers, linkTo(methodOn(CustomerController.class)
                 .allCustomers())
                 .withSelfRel());
     }
 
-    @GetMapping("/customersByLastName/{lastName}")
-    public CollectionModel<EntityModel<Customer>> customersByLastName(@PathVariable String lastName) {
-        List<EntityModel<Customer>> customers = service.getCustomersByLastName(lastName);
+    @GetMapping("/customersByLastName/{customerLastName}")
+    public CollectionModel<EntityModel<Customer>> customerByLastName(@PathVariable String customerLastName) {
+        List<EntityModel<Customer>> customers = customerService.getCustomersByLastName(customerLastName);
         return CollectionModel.of(customers, linkTo(methodOn(CustomerController.class)
-                .customersByLastName(lastName))
+                .customerByLastName(customerLastName))
                 .withSelfRel());
     }
 
     @PostMapping("/customers")
-    ResponseEntity<?> newCustomer(@RequestBody Customer newCustomer) {
-        EntityModel<Customer> entityModel = service.saveCustomer(newCustomer);
+    ResponseEntity<?> addNewUser(@RequestBody Customer newCustomer) {
+        EntityModel<Customer> entityModel = customerService.saveCustomer(newCustomer);
         return ResponseEntity //
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
                 .body(entityModel);
     }
 
-    @DeleteMapping("/customers/{id}")
-    ResponseEntity<?> deleteCustomer(@PathVariable Long id) {
-        service.deleteCustomerById(id);
+    @DeleteMapping("/customers/{customerId}")
+    ResponseEntity<?> deleteCustomer(@PathVariable Long customerId) {
+        customerService.deleteCustomerById(customerId);
         return ResponseEntity.noContent().build();
     }
 

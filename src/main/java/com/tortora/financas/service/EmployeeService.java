@@ -14,60 +14,60 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeService {
 
-    private final EmployeeRepository repository;
-    private final EmployeeModelAssembler assembler;
+    private final EmployeeRepository employeeRepository;
+    private final EmployeeModelAssembler employeeModelAssembler;
 
-    public EmployeeService(EmployeeRepository repository, EmployeeModelAssembler assembler) {
-        this.repository = repository;
-        this.assembler = assembler;
+    public EmployeeService(EmployeeRepository employeeRepository, EmployeeModelAssembler employeeModelAssembler) {
+        this.employeeRepository = employeeRepository;
+        this.employeeModelAssembler = employeeModelAssembler;
     }
 
     public List<EntityModel<Employee>> getEmployees() {
-        return repository.findAll().stream()
-                .map(assembler::toModel)
+        return employeeRepository.findAll().stream()
+                .map(employeeModelAssembler::toModel)
                 .collect(Collectors.toList());
     }
 
     public EntityModel<Employee> saveEmployee(Employee newEmployee) {
-        return assembler.toModel(repository.save(newEmployee));
+        return employeeModelAssembler.toModel(employeeRepository.save(newEmployee));
     }
 
-    public EntityModel<Employee> getEmployeeById(Long id) {
-        Optional<Employee> employee = repository.findById(id);
+    public EntityModel<Employee> getEmployeeById(Long employeeId) {
+        Optional<Employee> employee = employeeRepository.findById(employeeId);
 
         if (employee.isPresent()) {
-            return assembler.toModel(employee.get());
+            return employeeModelAssembler.toModel(employee.get());
         } else {
-            throw new EmployeeNotFoundException(id);
+            throw new EmployeeNotFoundException(employeeId);
         }
     }
 
-    public EntityModel<Employee> updateEmployee(Employee newEmployee, Long id) {
-        Employee updatedEmployee = repository.findById(id)
+    public EntityModel<Employee> updateEmployee(Employee newEmployee, Long employeeId) {
+        Employee updatedEmployee = employeeRepository.findById(employeeId)
                 .map(employee -> {
                     employee.setName(newEmployee.getName());
                     employee.setRole(newEmployee.getRole());
-                    return repository.save(employee);
+                    return employeeRepository.save(employee);
                 })
                 .orElseGet(() -> {
-                    newEmployee.setId(id);
-                    return repository.save(newEmployee);
+                    newEmployee.setId(employeeId);
+                    return employeeRepository.save(newEmployee);
                 });
-        return assembler.toModel(updatedEmployee);
+        return employeeModelAssembler.toModel(updatedEmployee);
     }
 
-    public void deleteEmployeeById(Long id) {
-        Optional<Employee> employee = repository.findById(id);
+    public void deleteEmployeeById(Long employeeId) {
+        Optional<Employee> employee = employeeRepository.findById(employeeId);
 
         if (employee.isPresent()) {
-            repository.deleteById(id);
+            employeeRepository.deleteById(employeeId);
         } else {
-            throw new EmployeeNotFoundException(id);
+            throw new EmployeeNotFoundException(employeeId);
         }
     }
 
     public void deleteAllEmployees() {
-        repository.deleteAll();
+        employeeRepository.deleteAll();
     }
 
 }

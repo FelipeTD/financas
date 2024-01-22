@@ -17,7 +17,7 @@ public class OrderModelAssembler implements RepresentationModelAssembler<Order, 
         // Unconditional links to single-item resource and aggregate root
 
         EntityModel<Order> orderModel = EntityModel.of(order,
-                linkTo(methodOn(OrderController.class).oneOrder(order.getId())).withSelfRel(),
+                linkTo(methodOn(OrderController.class).oneOrderById(order.getId())).withSelfRel(),
                 linkTo(methodOn(OrderController.class).allOrders()).withRel("orders"));
 
         // Conditional links based on state of the order
