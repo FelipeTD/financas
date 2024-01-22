@@ -70,7 +70,6 @@ public class IntegrationTest {
         userService.deleteUsers();
     }
 
-    // Begin Customer Integration Tests
     @Test
     @Order(1)
     void haveToSaveACustomer() {
@@ -123,9 +122,7 @@ public class IntegrationTest {
 
         Assertions.assertThrows(CustomerNotFoundException.class, () -> customerService.getCustomerById(savedCustomer.getContent().getId()));
     }
-    // End Customer Integration Tests
 
-    // Begin Employee Integration Tests
     @Test
     @Order(6)
     void haveToSaveAnEmployee() {
@@ -173,9 +170,7 @@ public class IntegrationTest {
 
         Assertions.assertThrows(EmployeeNotFoundException.class, () -> employeeService.getEmployeeById(1L));
     }
-    // End Employee Integration Tests
 
-    // Begin Order Integration Tests
     @Test
     @Order(10)
     void haveToSaveOrder() {
@@ -250,10 +245,9 @@ public class IntegrationTest {
 
         Assertions.assertEquals(3, orderList.size());
     }
-    // End Order Integration Tests
 
-    // Begin User Integratino Tests
     @Test
+    @Order(17)
     void haveToSaveUser() {
         int afterSave = ((Collection<?>) userService.getUsers()).size();
         userService.saveUser("Filipe", "fedispato@gmail.com");
@@ -263,6 +257,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Order(18)
     void haveToGetAllUsers() {
         userService.saveUser("Filipe", "fedispato@gmail.com");
         userService.saveUser("Debora", "debora@gmail.com");
@@ -273,6 +268,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Order(19)
     void haveToDeleteAllUsers() {
         userService.saveUser("Filipe", "fedispato@gmail.com");
         userService.saveUser("Debora", "debora@gmail.com");
@@ -283,6 +279,12 @@ public class IntegrationTest {
 
         Assertions.assertEquals(0, numberOfUsers);
     }
-    // End User Integration Tests
+
+    @Test
+    @Order(20)
+    void haveToMigrateEmployees() {
+        List<EntityModel<Employee>> response = employeeService.migrateEmployees("https://65ae79a41dfbae409a74ebbc.mockapi.io/api/v1/employee");
+        Assertions.assertEquals(5, response.size());
+    }
 
 }

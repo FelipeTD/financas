@@ -279,6 +279,23 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - https://www.dio.me/articles/alguns-dos-principais-padroes-de-projeto-presentes-no-spring-boot
 - O que é Clean Code e Quais são Suas Regras Básicas?
   - https://blog.accurate.com.br/clean-code/
+
+### Décimo Objetivo: Adicionar requisição HTTP e tratamento da resposta em JSON e XML
+- Para não ser necessário criar outro projeto para a requisição HTTP utilizei o Mock API
+- O que foi feito nessa etapa?
+  - Criamos o HttpUtils para centralizar as chamadas HTTP e leitura do retorno
+  - Dividimos os métodos por requisição.
+  - Como é um projeto de exemplo temos somente o `GET` implementado.
+- Nova funcionalidade para migração de `employess` de outro sistema
+  - Realizamos a chamada da `API` que criamos acima e convertemos para a classe `Employee`
+  - Depois realizamos a chamada do `repository` para salvar todos os novos empregados.
+  - Foi utilizado a biblioteca `gson` para realizar a conversão do objeto JSON para Employee.
+
+#### Links Utilizados
+- Mock API
+  - https://mockapi.io/
+- Mockando APIs REST facilmente com o MockAPI
+  - https://medium.com/code-prestige/mockando-apis-rest-facilmente-com-o-mockapi-48f03a78aaca
 			
 
 

@@ -100,6 +100,30 @@ public class EmployeeControllerTest {
     }
 
     @Test
+    void migrateEmployeesTest() throws Exception {
+        Employee e = new Employee("Filipe", "Dias", "Programador");
+        Employee e2 = new Employee("Filipe2", "Dias2", "Programador2");
+        Employee e3 = new Employee("Filipe3", "Dias3", "Programador3");
+
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.add(e);
+        employeeList.add(e2);
+        employeeList.add(e3);
+
+        List<EntityModel<Employee>> list = employeeList.stream()
+                .map(assembler::toModel).toList();
+
+        when(service.migrateEmployees("http://teste.com.br")).thenReturn(list);
+        this.mockMvc.perform(post("/employees/migrate")
+                        .param("url", "http://teste.com.br")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._embedded.employeeList").exists())
+                .andExpect(jsonPath("$._embedded.employeeList[*].firstName").exists());
+    }
+
+    @Test
     void replaceEmployeeTest() throws Exception {
         Employee e = new Employee("Filipe", "Dias", "Programador");
         EntityModel<Employee> employeeEntityModel = assembler.toModel(e);

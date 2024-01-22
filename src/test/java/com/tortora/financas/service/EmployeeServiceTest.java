@@ -3,6 +3,7 @@ package com.tortora.financas.service;
 import com.tortora.financas.exceptions.EmployeeNotFoundException;
 import com.tortora.financas.model.Employee;
 import com.tortora.financas.repository.EmployeeRepository;
+import com.tortora.financas.utils.HttpUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -22,6 +29,9 @@ public class EmployeeServiceTest {
 
     @MockBean
     private EmployeeRepository repository;
+
+    @MockBean
+    private HttpUtils httpUtils;
 
     @Autowired
     private EmployeeService service;
@@ -46,6 +56,21 @@ public class EmployeeServiceTest {
         when(repository.save(e)).thenReturn(e);
         EntityModel<Employee> response = service.saveEmployee(e);
         Assertions.assertEquals("Filipe", Objects.requireNonNull(response.getContent()).getFirstName());
+    }
+
+    @Test
+    void migrateEmployeesTest() {
+        Employee e = new Employee("Filipe", "Tortora", "Programador");
+        HttpURLConnection mockHttpURLConnection = mock(HttpURLConnection.class);
+        String output = "[{\"firstName\":\"firstName 1\",\"lastName\":\"lastName 1\",\"role\":\"role 1\",\"id\":\"1\"}]";
+        String url = "http://teste.com.br";
+
+        when(httpUtils.get(url)).thenReturn(mockHttpURLConnection);
+        when(httpUtils.reader(mockHttpURLConnection)).thenReturn(new StringBuilder(output));
+        when(repository.save(e)).thenReturn(e);
+
+        List<EntityModel<Employee>> response = service.migrateEmployees(url);
+        Assertions.assertEquals(1, response.size());
     }
 
     @Test
