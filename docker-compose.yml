@@ -1,31 +1,30 @@
 version: "3.7"
 services:
-  api_service:
-    build: .
-    restart: always
+  financas:
+    build:
+      context: ./
+      dockerfile: Dockerfile
     ports:
-      - 8080:8080
-    networks:
-      - springapimysql-net
-    environment:
-      - spring.datasource.url=jdbc:mysql://mysqldb:3306/FINANCAS?allowPublicKeyRetrieval=true
+      - "8080:8080"
     depends_on:
-      - mysqldb
+      - financasdb
+    networks:
+      - financas-net
+    restart: always
 
-    volumes:
-      - .m2:/root/.m2
-
-  mysqldb:
-    image: "mysql:8.0"
+  financasdb:
+    image: "mysql:latest"
+    container_name: financasdb
     restart: always
     ports:
-      - 3306:3306
+      - "3306:3306"
     networks:
-      - springapimysql-net
+      - financas-net
     environment:
       MYSQL_DATABASE: FINANCAS
       MYSQL_USER: tortora
       MYSQL_PASSWORD: ftd38427689
       MYSQL_ROOT_PASSWORD: ftd38427689
+      MYSQL_ROOT_HOST: '%'
 networks:
-  springapimysql-net:
+  financas-net:

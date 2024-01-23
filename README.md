@@ -306,25 +306,94 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - Comando para atualizar a imagem do mysql
     - docker pull mysql
   - Comando para criar uma rede que será usada para o deploy do banco e da aplicação
-    - docker network create springboot-mysql-net para criar um network para rodar o projeto
+    - docker network create financas-net
   - Comando para verificar se a rede foi criada
     - docker network ls 
+  - Caso necessário, comando para deletar a `network`
+    - docker network rm financas-net
   - Comando para rodar o mysql na mesma network que o projeto
-    - docker run --name mysqldb --network springboot-mysql-net -e MYSQL_ROOT_PASSWORD=ftd38427689 -e MYSQL_DATABASE=FINANCAS -d mysql
+    - docker run -p 3306:3306 --name financasdb --network financas-net -e MYSQL_ROOT_PASSWORD=ftd38427689 -e MYSQL_DATABASE=FINANCAS -e MYSQL_USER=tortora -e MYSQL_PASSWORD=ftd38427689 -e DATABASE_PORT=3306 -d mysql:latest
   - Comando para acessar o container
-    - docker exec -it mysqldb bash
+    - docker exec -it financasdb bash
+    - Também pode acessar o container pelo `Docker Desktop`
+      - Clique na instância criada
+      - Entre na aba Exec
   - Comando para acessar o mysql
     - mysql -u root -p
     - Digite a sua senha
     - show databases;
+    - Comando para verificar a permissão dos `usuários`
+      - select host, user from mysql.user;
+      - Verifique se o `usuário` criado e o root estão com `host` '%'
     - exit para sair do banco de dados e do container
 - Deploy da aplicação
   - mvn clean package
-  - 
+  - Se o comando tiver funcionado corretamente irá aparecer uma pasta `target` com um arquivo.jar
+  - Crie um arquivo DockerFile no diretorio raiz do projeto
+    - Ele deve ficar no mesmo nível do pom.xml
+     ```
+     FROM eclipse-temurin:17
+  
+     LABEL mentainer="javaguides.net@gmail.com"
+  
+     WORKDIR /app
+  
+     COPY target/financas-0.0.1-SNAPSHOT.jar /app/financas.jar
+  
+     ENTRYPOINT ["java", "-jar", "financas.jar"]
+     ```
+  - Adicione um arquivo chamado `application-docker.properties` 
+    - Esse arquivo deve estar no mesmo nível do arquivo `application.properties`
+    ```
+    spring.datasource.url=jdbc:mysql://financasdb:3306/FINANCAS
+    spring.datasource.username=tortora
+    spring.datasource.password=ftd38427689
+
+    #spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+    spring.jpa.hibernate.ddl-auto=update
+    ```
+  - Adicione uma propriedade dentro do `application.properties`
+    - `spring.profiles.active=docker`
+    - Essa propriedade deve ficar ativa somente quando for fazer deploy do projeto
+    - Caso realize testes locais comente essa propriedade
+  - Na pasta test. Crie uma pasta resources
+    - Na pasta resources. Adicione um arquivo `application.properties`
+    - Esse arquivo terá o seguinte conteúdo:
+    ```
+    spring.jpa.hibernate.ddl-auto=create
+
+    spring.datasource.url=
+    spring.datasource.username=
+    spring.datasource.password=
+    spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+    ```
+    - Esse arquivo serve para executar os testes sem quebrar a aplicação
+  - Execute o comando `mvn clean package` para criar o `jar` do projeto
+- Criando a imagem do docker do projeto
+  - Execute o comando `docker build -t financas .` para criar a imagem
+  - Execute o comando `docker images` para verificar se a imagem foi criada
+- Executando a imagem criada na mesma `network` que o banco de dados
+  - Comando para iniciar a imagem
+    - `docker run --network financas-net --name financas-container -p 8080:8080 financas`
+    - A explicação do comando seria:
+      - docker run --network <nome_da_network>
+      - --name <nome_do_container>
+      - -p <porta_que_vai_rodar:porta_no_container>
+      - nome da imagem gerada anteriormente
+- Lembrando que executamos dois projetos separados na mesma network
+- Caso a conexão não seja estabelicida entre o banco de dados e o projeto
+  - Delete a imagem criada e os containers.
+  - Execute o comando docker compose up
+    - Esse comando irá subir a sua aplicação a partir do arquivo docker-compose.yml
+    - Ele irá dar erros no começo da execução porque o banco de dados não iniciou
+    - Após executado o comando os containers irão ficar disponíveis no docker
+  
 
 #### Links Utilizados
 - Deploy Spring Boot MySQL Application to Docker
   - https://www.javaguides.net/2022/12/deploy-spring-boot-mysql-application-to-docker.html
+- How to Dockerize Spring boot with MySql | Implementation | Live Demo | Docker Compose | Code Decode
+  - https://www.youtube.com/watch?v=DwWkjEwsI4Q
 			
 
 

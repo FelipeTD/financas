@@ -1,9 +1,9 @@
-#
-# Build stage
-#
-FROM maven:3.8.3-openjdk-17 AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","/home/app/target/spring_rest_docker.jar"]
+FROM eclipse-temurin:17
+
+LABEL mentainer="fedispato@gmail.com"
+
+WORKDIR /app
+
+COPY target/financas-0.0.1-SNAPSHOT.jar /app/financas.jar
+
+ENTRYPOINT ["java", "-jar", "financas.jar"]
