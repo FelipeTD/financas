@@ -77,7 +77,7 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - grant all on FINANCAS.* to 'tortora'@'%';
     - Garante todas as permissões para o utilizador tortora.
 - Configuração do arquivo application.properties
-  - O comando "pring.jpa.hibernate.ddl-auto" deve começar com create e depois ‘update’
+  - O comando "spring.jpa.hibernate.ddl-auto" deve começar com create e depois ‘update’
   - O comando `spring.jpa.show-sql` ajuda quando é necessário ver o SQL que é gerado.
 - Em relação ao código:
   - Foi adicionado uma classe model User para guardar as informações do utilizador.
@@ -290,12 +290,41 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - Realizamos a chamada da `API` que criamos acima e convertemos para a classe `Employee`
   - Depois realizamos a chamada do `repository` para salvar todos os novos empregados.
   - Foi utilizado a biblioteca `gson` para realizar a conversão do objeto JSON para Employee.
+- Criação de API que retorna um XML utilizando o Beeceptor
+  - Para pegar o XML utilize https://mpe2202814057b237397.free.beeceptor.com/data
 
 #### Links Utilizados
 - Mock API
   - https://mockapi.io/
 - Mockando APIs REST facilmente com o MockAPI
   - https://medium.com/code-prestige/mockando-apis-rest-facilmente-com-o-mockapi-48f03a78aaca
+- Beeceptor
+  - https://beeceptor.com/
+
+### Passo 11: Adicionar configurações do Docker
+- Deploy do banco de dados
+  - Comando para atualizar a imagem do mysql
+    - docker pull mysql
+  - Comando para criar uma rede que será usada para o deploy do banco e da aplicação
+    - docker network create springboot-mysql-net para criar um network para rodar o projeto
+  - Comando para verificar se a rede foi criada
+    - docker network ls 
+  - Comando para rodar o mysql na mesma network que o projeto
+    - docker run --name mysqldb --network springboot-mysql-net -e MYSQL_ROOT_PASSWORD=ftd38427689 -e MYSQL_DATABASE=FINANCAS -d mysql
+  - Comando para acessar o container
+    - docker exec -it mysqldb bash
+  - Comando para acessar o mysql
+    - mysql -u root -p
+    - Digite a sua senha
+    - show databases;
+    - exit para sair do banco de dados e do container
+- Deploy da aplicação
+  - mvn clean package
+  - 
+
+#### Links Utilizados
+- Deploy Spring Boot MySQL Application to Docker
+  - https://www.javaguides.net/2022/12/deploy-spring-boot-mysql-application-to-docker.html
 			
 
 
