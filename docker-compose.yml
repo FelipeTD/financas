@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+  financas:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - financasdb
+    networks:
+      - financas-net
+    restart: always
+
+  financasdb:
+    image: "mysql:latest"
+    container_name: financasdb
+    restart: always
+    ports:
+      - "3306:3306"
+    networks:
+      - financas-net
+    environment:
+      MYSQL_DATABASE: FINANCAS
+      MYSQL_USER: tortora
+      MYSQL_PASSWORD: ftd38427689
+      MYSQL_ROOT_PASSWORD: ftd38427689
+      MYSQL_ROOT_HOST: '%'
+networks:
+  financas-net:

@@ -38,6 +38,7 @@ public class IntegrationTest {
         registry.add("spring.datasource.driverClassName", () -> mySQLContainer.getDriverClassName());
         registry.add("spring.datasource.username", () -> mySQLContainer.getUsername());
         registry.add("spring.datasource.password", () -> mySQLContainer.getPassword());
+        registry.add("spring.flyway.enabled", () -> "true");
     }
 
     @Autowired
