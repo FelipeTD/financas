@@ -5,15 +5,21 @@ import com.tortora.financas.exceptions.EmployeeNotFoundException;
 import com.tortora.financas.model.Employee;
 import com.tortora.financas.model.EmployeeModelAssembler;
 import com.tortora.financas.model.Order;
+import com.tortora.financas.model.request.MigrateEmployeeRequest;
 import com.tortora.financas.service.EmployeeService;
+import com.tortora.financas.utils.ConverterUtils;
+import com.tortora.financas.utils.HttpUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -33,8 +39,10 @@ public class EmployeeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private EmployeeService service;
+
     @Spy
     private EmployeeModelAssembler assembler;
 
@@ -100,7 +108,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    void migrateEmployeesTest() throws Exception {
+    void migrateEmployeesJSONTest() throws Exception {
         Employee e = new Employee("Filipe", "Dias", "Programador");
         Employee e2 = new Employee("Filipe2", "Dias2", "Programador2");
         Employee e3 = new Employee("Filipe3", "Dias3", "Programador3");
@@ -113,9 +121,12 @@ public class EmployeeControllerTest {
         List<EntityModel<Employee>> list = employeeList.stream()
                 .map(assembler::toModel).toList();
 
-        when(service.migrateEmployees("http://teste.com.br")).thenReturn(list);
+        MigrateEmployeeRequest request = new MigrateEmployeeRequest("http://teste.com.br", "JSON");
+
+        when(service.migrateEmployees(request)).thenReturn(list);
         this.mockMvc.perform(post("/employees/migrate")
-                        .param("url", "http://teste.com.br")
+                        .content(asJsonString(request))
+                        .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -193,6 +204,42 @@ public class EmployeeControllerTest {
         Assertions.assertNotEquals(e, e4);
         Assertions.assertNotEquals(e, e5);
         Assertions.assertNotEquals(e, e6);
+    }
+
+    @Test
+    void migrateEmployeeRequestToStringTest() {
+        MigrateEmployeeRequest m = new MigrateEmployeeRequest("http://teste.com.br", "JSON");
+        Assertions.assertEquals("MigrateEmployeeRequest{url='http://teste.com.br', dataType='JSON'}", m.toString());
+    }
+
+    @Test
+    void migrateEmployeeRequestHashCodeTest() {
+        MigrateEmployeeRequest m = new MigrateEmployeeRequest("http://teste.com.br", "JSON");
+        Assertions.assertEquals(-871987521, m.hashCode());
+    }
+
+    @Test
+    void migrateEmployeeRequestEqualsTest() {
+        // Objetos iguais
+        MigrateEmployeeRequest m = new MigrateEmployeeRequest("http://teste.com.br", "JSON");
+        MigrateEmployeeRequest m2 = new MigrateEmployeeRequest("http://teste.com.br", "JSON");
+
+        // URL diferente
+        MigrateEmployeeRequest m3 = new MigrateEmployeeRequest("http://teste.com.br", "JSON");
+        m3.setUrl("http://teste2.com.br");
+
+        // dataType diferente
+        MigrateEmployeeRequest m4 = new MigrateEmployeeRequest("http://teste.com.br", "JSON");
+        m4.setDataType("XML");
+
+        // Objeto diferente
+        Order order = new Order("minha ordem", Status.IN_PROGRESS);
+
+        Assertions.assertEquals(m, m);
+        Assertions.assertNotEquals(m, order);
+        Assertions.assertEquals(m, m2);
+        Assertions.assertNotEquals(m, m3);
+        Assertions.assertNotEquals(m, m4);
     }
 
 }

@@ -5,6 +5,7 @@ import com.tortora.financas.exceptions.CustomerNotFoundException;
 import com.tortora.financas.exceptions.EmployeeNotFoundException;
 import com.tortora.financas.model.Customer;
 import com.tortora.financas.model.Employee;
+import com.tortora.financas.model.request.MigrateEmployeeRequest;
 import com.tortora.financas.service.CustomerService;
 import com.tortora.financas.service.EmployeeService;
 import com.tortora.financas.service.OrderService;
@@ -284,8 +285,17 @@ public class IntegrationTest {
     @Test
     @Order(20)
     void haveToMigrateEmployees() {
-        List<EntityModel<Employee>> response = employeeService.migrateEmployees("https://65ae79a41dfbae409a74ebbc.mockapi.io/api/v1/employee");
+        MigrateEmployeeRequest request = new MigrateEmployeeRequest("https://65ae79a41dfbae409a74ebbc.mockapi.io/api/v1/employee", "JSON");
+        List<EntityModel<Employee>> response = employeeService.migrateEmployees(request);
         Assertions.assertEquals(5, response.size());
+    }
+
+    @Test
+    @Order(21)
+    void haveToMigrateEmployeesFromXML() {
+        MigrateEmployeeRequest request = new MigrateEmployeeRequest("https://mpe2202814057b237397.free.beeceptor.com/data", "XML");
+        List<EntityModel<Employee>> response = employeeService.migrateEmployees(request);
+        Assertions.assertEquals(3, response.size());
     }
 
 }

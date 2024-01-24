@@ -282,6 +282,8 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
 
 ### Décimo Objetivo: Adicionar requisição HTTP e tratamento da resposta em JSON e XML
 - Para não ser necessário criar outro projeto para a requisição HTTP utilizei o Mock API
+- URL do JSON
+  - https://65ae79a41dfbae409a74ebbc.mockapi.io/api/v1/employee
 - O que foi feito nessa etapa?
   - Criamos o HttpUtils para centralizar as chamadas HTTP e leitura do retorno
   - Dividimos os métodos por requisição.
@@ -292,6 +294,10 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - Foi utilizado a biblioteca `gson` para realizar a conversão do objeto JSON para Employee.
 - Criação de API que retorna um XML utilizando o Beeceptor
   - Para pegar o XML utilize https://mpe2202814057b237397.free.beeceptor.com/data
+- Conversão do XML para o objeto Employee
+  - Foram criados alguns objetos POJO para receber o XML
+  - Como agora temos dois objetos (JSON e XML) centralizei a conversão deles na classe ConvertUtils
+  - Lembrando que precisa atualizar os testes unitários e de integração adicionando e modificando os testes
 
 #### Links Utilizados
 - Mock API
@@ -300,8 +306,12 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - https://medium.com/code-prestige/mockando-apis-rest-facilmente-com-o-mockapi-48f03a78aaca
 - Beeceptor
   - https://beeceptor.com/
+- UnMarshalling- How to convert XML to Java Objects using JAXB
+  - https://qaautomation.expert/2021/12/22/unmarshalling-how-to-convert-xml-to-java-objects-using-jaxb/
+- JAXB – Marshal and Unmarshal List or Set of Objects
+  - https://howtodoinjava.com/jaxb/jaxb-exmaple-marshalling-and-unmarshalling-list-or-set-of-objects/
 
-### Passo 11: Adicionar configurações do Docker
+### Décimo Primeiro Objetivo: Adicionar configurações do Docker
 - Deploy do banco de dados
   - Comando para atualizar a imagem do mysql
     - docker pull mysql

@@ -2,20 +2,19 @@ package com.tortora.financas.service;
 
 import com.tortora.financas.exceptions.EmployeeNotFoundException;
 import com.tortora.financas.model.Employee;
+import com.tortora.financas.model.request.MigrateEmployeeRequest;
 import com.tortora.financas.repository.EmployeeRepository;
+import com.tortora.financas.utils.ConverterUtils;
 import com.tortora.financas.utils.HttpUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +31,9 @@ public class EmployeeServiceTest {
 
     @MockBean
     private HttpUtils httpUtils;
+
+    @MockBean
+    private ConverterUtils converterUtils;
 
     @Autowired
     private EmployeeService service;
@@ -59,17 +61,38 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void migrateEmployeesTest() {
+    void migrateEmployeesJSONTest() {
         Employee e = new Employee("Filipe", "Tortora", "Programador");
         HttpURLConnection mockHttpURLConnection = mock(HttpURLConnection.class);
         String output = "[{\"firstName\":\"firstName 1\",\"lastName\":\"lastName 1\",\"role\":\"role 1\",\"id\":\"1\"}]";
         String url = "http://teste.com.br";
+        MigrateEmployeeRequest request = new MigrateEmployeeRequest(url, "JSON");
 
-        when(httpUtils.get(url)).thenReturn(mockHttpURLConnection);
-        when(httpUtils.reader(mockHttpURLConnection)).thenReturn(new StringBuilder(output));
+        List<Employee> employees = new ArrayList<>();
+        employees.add(new Employee("Filipe", "Tortora", "Programador"));
+
+        when(converterUtils.convertJsonEmployees(url)).thenReturn(employees);
+        // when(httpUtils.get(url)).thenReturn(mockHttpURLConnection);
+        // when(httpUtils.reader(mockHttpURLConnection)).thenReturn(new StringBuilder(output));
         when(repository.save(e)).thenReturn(e);
 
-        List<EntityModel<Employee>> response = service.migrateEmployees(url);
+        List<EntityModel<Employee>> response = service.migrateEmployees(request);
+        Assertions.assertEquals(1, response.size());
+    }
+
+    @Test
+    void migrateEmployeesXMLTest() {
+        Employee e = new Employee("Filipe", "Tortora", "Programador");
+        String url = "http://teste.com.br";
+        MigrateEmployeeRequest request = new MigrateEmployeeRequest(url, "XML");
+
+        List<Employee> employees = new ArrayList<>();
+        employees.add(new Employee("Filipe", "Tortora", "Programador"));
+
+        when(converterUtils.convertXMLEmployees(url)).thenReturn(employees);
+        when(repository.save(e)).thenReturn(e);
+
+        List<EntityModel<Employee>> response = service.migrateEmployees(request);
         Assertions.assertEquals(1, response.size());
     }
 
