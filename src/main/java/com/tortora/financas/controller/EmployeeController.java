@@ -3,6 +3,7 @@ package com.tortora.financas.controller;
 import java.util.List;
 
 import com.tortora.financas.model.Employee;
+import com.tortora.financas.model.request.MigrateEmployeeRequest;
 import com.tortora.financas.service.EmployeeService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -39,10 +40,10 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees/migrate")
-    ResponseEntity<?> migrateEmployees(@RequestParam("url") String url) {
-        List<EntityModel<Employee>> employees = employeeService.migrateEmployees(url);
+    ResponseEntity<?> migrateEmployees(@RequestBody MigrateEmployeeRequest request) {
+        List<EntityModel<Employee>> employees = employeeService.migrateEmployees(request);
         return ResponseEntity.ok(CollectionModel.of(employees, linkTo(methodOn(EmployeeController.class)
-                .migrateEmployees(url))
+                .migrateEmployees(request))
                 .withSelfRel()));
     }
 
