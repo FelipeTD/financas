@@ -29,6 +29,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<CollectionModel<EntityModel<Order>>> allOrders() {
         List<EntityModel<Order>> orders = orderService.getOrders();
         return ResponseEntity.ok(CollectionModel.of(orders, //
@@ -36,6 +37,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders/{orderId}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> oneOrderById(@PathVariable Long orderId) {
         try {
             EntityModel<Order> order = orderService.getEntityModelOrderById(orderId);
@@ -51,6 +53,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders/status/{status}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<CollectionModel<EntityModel<Order>>> ordersByStatus(@PathVariable Status status) {
         List<EntityModel<Order>> orders = orderService.getOrdersByStatus(status);
         return ResponseEntity.ok(CollectionModel.of(orders,
@@ -58,6 +61,7 @@ public class OrderController {
     }
 
     @PostMapping("/orders")
+    @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<EntityModel<Order>> addNewOrder(@RequestBody Order order) {
         EntityModel<Order> newOrder = orderService.saveOrder(order);
 
@@ -67,6 +71,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/orders/{orderId}/cancel")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> cancel(@PathVariable Long orderId) {
         Order order = orderService.getOrderById(orderId);
 
@@ -81,6 +86,7 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{orderId}/complete")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> complete(@PathVariable Long orderId) {
         Order order = orderService.getOrderById(orderId);
 
