@@ -404,6 +404,22 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
   - https://www.javaguides.net/2022/12/deploy-spring-boot-mysql-application-to-docker.html
 - How to Dockerize Spring boot with MySql | Implementation | Live Demo | Docker Compose | Code Decode
   - https://www.youtube.com/watch?v=DwWkjEwsI4Q
+
+### Décimo Segundo Objetivo: Adicionar Swagger
+- O Swagger é uma opção de documentação da API que criamos
+- Utilizamos o SpringDoc Open API
+- Basta adicionar a dependência no pom.xml
+  - A biblioteca já faz o mapeamento de todos os endpoints disponiveis
+  - Pode procurar mais configurações na documentação da API
+  - Para acessar o Swagger basta iniciar o projeto e acessar http://localhost:8080/swagger-ui/index.html
+  - O OpenAPI pode ser acessado por http://localhost:8080/v3/api-docs 
+- Colocado a anotação `@ResponseStatus` nos arquivos `Controller` para definir o retorno de cada endpoint
+- Essas são somente configurações iniciais do Swagger
+- Podem ser colocadas várias anotações para deixar a documentação melhor
+
+#### Links Utilizados
+- springdoc-openapi v2.3.0
+  - https://springdoc.org/#getting-started
 			
 
 
