@@ -33,7 +33,7 @@ public class UserControllerTest {
         when(service.saveUser("Filipe", "fedispato@gmail.com")).thenReturn("Saved");
         this.mockMvc.perform(post("/user/add?name=Filipe&email=fedispato@gmail.com"))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("Saved")));
 
     }
@@ -69,7 +69,7 @@ public class UserControllerTest {
         when(service.deleteUsers()).thenReturn("Deleted");
         this.mockMvc.perform(delete("/user/delete"))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect(content().string(containsString("Deleted")));
 
     }

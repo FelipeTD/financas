@@ -420,6 +420,34 @@ Abaixo todos os passos feitos para adicionar o MySQL ao projeto:
 #### Links Utilizados
 - springdoc-openapi v2.3.0
   - https://springdoc.org/#getting-started
+
+### Décimo Terceiro Objetivo: Adicionar CrossOrigin
+- Teste
+
+#### Links Utilizados
+- Teste
+  - Link Teste
+
+### Décimo Quarto Objetivo: Realizar deploy da aplicação
+- Teste
+
+#### Links Utilizados
+- Teste
+  - Link Teste
+
+### Décimo Quinto Objetivo: Diminuir tamanho do pacote de deploy
+- Teste
+
+#### Links Utilizados
+- Teste
+  - Link Teste
+
+### Décimo Sexto Objetivo: Adicionar teste de desempenho na aplicação
+- Teste
+
+#### Links Utilizados
+- Teste
+  - Link Teste
 			
 
 
